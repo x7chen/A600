@@ -1,6 +1,7 @@
 package com.cfk.a600;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.AndroidRuntimeException;
 import android.util.Log;
@@ -18,6 +19,8 @@ public class ActivityWakeUp extends Activity {
     private static final String TAG = "ActivityWakeUp";
     private TextView txtResult;
     private TextView txtLog;
+
+    Intent wpIntent;
 
     private final String DESC_TEXT = "" +
             "唤醒已经启动(首次使用需要联网授权)\n" +
@@ -39,12 +42,22 @@ public class ActivityWakeUp extends Activity {
         findViewById(R.id.setting).setVisibility(View.GONE);
 
         txtResult.setText("请说唤醒词:  小度你好 或 百度一下");
+        wpIntent = new Intent(this,ServiceWakeUp.class);
+        startService(wpIntent);
+
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        stopService(wpIntent);
     }
 
     @Override
     protected void onResume() {
         super.onResume();
 
+/*
         // 唤醒功能打开步骤
         // 1) 创建唤醒事件管理器
         mWpEventManager = EventManagerFactory.create(ActivityWakeUp.this, "wp");
@@ -74,12 +87,16 @@ public class ActivityWakeUp extends Activity {
         mWpEventManager.send("wp.start", new JSONObject(params).toString(), null, 0, 0);
 
         txtLog.setText(DESC_TEXT);
+        */
     }
 
     @Override
     protected void onPause() {
         super.onPause();
+
+        /*
         // 停止唤醒监听
         mWpEventManager.send("wp.stop", null, null, 0, 0);
+        */
     }
 }
